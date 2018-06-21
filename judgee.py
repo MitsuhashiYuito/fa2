@@ -9,19 +9,14 @@ import sys
 import os
 import cv2
 
-RUN_ID = "5"
-#check = "test"
-
 def load_images(dirname):
     imlist =[]
     for fname in os.listdir(dirname):
         im = np.array(cv2.imread(dirname+fname))
         im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
         im = im[10:-10, 90:-90]
-#         im = im_gray
         im = (im - np.average(im))/np.std(im)
         im_canny = np.resize(canny(im_gray), (im.shape[0], im.shape[1], 1))
-#         im = np.resize(im, (im.shape[0], im.shape[1], 1))
         im = np.concatenate((im, im_canny), axis=2)
         imlist.append(im)
 
@@ -29,8 +24,8 @@ def load_images(dirname):
     return imlist
 
 
-model = model_from_yaml(open("model/" + RUN_ID + ".yaml").read())
-model.load_weights( "model/" + RUN_ID + "_weight.h5")
+model = model_from_yaml(open("model/5.yaml").read())
+model.load_weights( "model/5_weight.h5")
 
 imlist_test = load_images("data/test/")
 x_test = np.concatenate([imlist_test],axis=0)
@@ -41,7 +36,7 @@ y_test = np.array([0])
 y_pred = np.round(model.predict(x_test, batch_size = 48, verbose=1))
 y_pred = y_pred.flatten()
 
-if y_pred[0] > 1:
+if y_pred[0] == 1:
         print('NG!アーム動かします！')
-if y_pred[0] < 1:
+if y_pred[0] == 0:
         print('OK!アーム動かしません!')
