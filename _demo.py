@@ -46,8 +46,9 @@ while(True):
         break
     if is_exist:
 #        subprocess.call(["python3", "_pick_place.py"])
-        now = time.time()
-        cv2.imwrite('sd_0/' + str(now) +  '.png',frame)
+#        now = time.time()
+        cv2.imwrite('data/test/' + "1" +  '.png',frame)
+        subprocess.call(["python3", "JUDGE.py"
         print('now capture', now)
         break
         
